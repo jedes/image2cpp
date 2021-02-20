@@ -379,6 +379,13 @@
 
 
 	<script type="text/javascript">	
+		var msbLsbLut = {
+			"0": "0", "1": "8", "2": "4", "3": "c", "4": "2",
+			"5": "a", "6": "6", "7": "e", "8": "1", "9": "9",
+			"a": "5", "b": "d", "c": "3", "d": "b", "e": "7",
+			"f": "f", "A": "5", "B": "D", "C": "3", "D": "B",
+			"E": "7", "F": "F"
+		};
 		var ConversionFunctions = {
 			// Output the image as a string for horizontally drawing displays
 			horizontal1bit: function (data, canvasWidth, canvasHeight){
@@ -410,6 +417,8 @@
 					if(byteIndex < 0){
 						var byteSet = number.toString(16);
 						if(byteSet.length == 1){ byteSet = "0"+byteSet; }
+						if (settings["lsbFirst"])
+							byteSet = msbLsbLut[byteSet[1]] + msbLsbLut[byteSet[0]];
 						var b = "0x"+byteSet;
 						output_string += b + ", ";
 						output_index++;
@@ -445,7 +454,9 @@
 						}
 						var byteSet = number.toString(16);
 						if (byteSet.length == 1){ byteSet = "0"+byteSet; }
-						var b = "0x"+byteSet.toString(16);
+						if (settings["lsbFirst"])
+							byteSet = msbLsbLut[byteSet[1]] + msbLsbLut[byteSet[0]];
+						var b = "0x"+byteSet;
 						output_string += b + ", ";
 						output_index++;
 						if(output_index >= 16){
